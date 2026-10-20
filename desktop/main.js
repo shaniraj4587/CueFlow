@@ -201,11 +201,6 @@ ipcMain.handle('overlay:launch', (_event, config) => {
 
   overlayWindow.webContents.on('did-finish-load', () => {
     overlayWindow.webContents.send('init-overlay', currentOverlayConfig);
-    overlayWindow.webContents.executeJavaScript(`
-      if (window.initOverlay) {
-        window.initOverlay(${JSON.stringify(currentOverlayConfig)});
-      }
-    `).catch(() => {});
   });
 
   overlayWindow.on('closed', () => {

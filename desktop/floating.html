@@ -62,8 +62,8 @@
     /* Header Bar */
     #header {
       height: 38px;
-      background: rgba(10, 15, 28, 0.75);
-      backdrop-filter: blur(8px);
+      background: rgba(10, 15, 28, 0.85);
+      backdrop-filter: blur(10px);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -193,13 +193,13 @@
 
     /* Footer Controls */
     #footer {
-      height: 40px;
-      background: rgba(10, 15, 28, 0.75);
-      backdrop-filter: blur(8px);
+      height: 42px;
+      background: rgba(10, 15, 28, 0.85);
+      backdrop-filter: blur(10px);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 10px;
+      padding: 0 8px;
       border-top: 1px solid rgba(255, 255, 255, 0.12);
       -webkit-app-region: no-drag;
       transition: opacity 0.3s ease;
@@ -208,23 +208,63 @@
     .controls {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 3px;
     }
     .btn-play {
       background: #0284C7;
       border-color: #0369A1;
-      padding: 4px 11px;
+      padding: 4px 10px;
       font-size: 11px;
+      font-weight: 700;
     }
     .btn-play:hover {
       background: #0369A1;
     }
+
+    /* Dedicated Speed Pills */
+    .speed-pills {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 3px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .btn-speed-pill {
+      background: transparent;
+      border: 1px solid transparent;
+      color: #94A3B8;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-speed-pill:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #FFFFFF;
+    }
+    .btn-speed-pill.active {
+      background: #0284C7 !important;
+      border-color: #38BDF8 !important;
+      color: #FFFFFF !important;
+    }
+    .btn-step {
+      padding: 2px 6px;
+      font-size: 12px;
+      font-weight: 700;
+      min-width: 22px;
+      text-align: center;
+    }
     .speed-tag {
       font-size: 11px;
-      color: #94A3B8;
-      font-weight: 600;
-      min-width: 24px;
+      color: #38BDF8;
+      font-weight: 700;
+      min-width: 28px;
       text-align: center;
+      padding: 0 2px;
     }
 
     /* Resize Handle */
@@ -275,10 +315,20 @@
       <div class="controls">
         <button class="btn btn-play" id="btn-play">▶ Play</button>
         <button class="btn" id="btn-rewind" title="Rewind to Top">↺ Top</button>
-        <button class="btn" id="btn-slower" title="Decrease Speed">-</button>
-        <span class="speed-tag" id="speed-label">3x</span>
-        <button class="btn" id="btn-faster" title="Increase Speed">+</button>
+
+        <!-- Speed Selection: 1X, 2X, 3X, 4X, 5X Pills + Fine Stepper -->
+        <div class="speed-pills">
+          <button class="btn-speed-pill" data-speed="1">1X</button>
+          <button class="btn-speed-pill active" data-speed="2">2X</button>
+          <button class="btn-speed-pill" data-speed="3">3X</button>
+          <button class="btn-speed-pill" data-speed="4">4X</button>
+          <button class="btn-speed-pill" data-speed="5">5X</button>
+          <button class="btn btn-step" id="btn-slower" title="Decrease Speed by 0.5x">−</button>
+          <span class="speed-tag" id="speed-label">2X</span>
+          <button class="btn btn-step" id="btn-faster" title="Increase Speed by 0.5x">+</button>
+        </div>
       </div>
+
       <div class="controls">
         <button class="btn" id="btn-font-minus" title="Smaller Font">A-</button>
         <button class="btn" id="btn-font-plus" title="Larger Font">A+</button>
@@ -301,14 +351,15 @@
       "CueFlow Floating Teleprompter (Invisible Mode)\n\n" +
       "• Drag this window by the top header bar anywhere over your camera or meeting app.\n" +
       "• Spacebar or '▶ Play' button starts and pauses smooth scrolling.\n" +
-      "• Up/Down arrow keys adjust your speaking speed.\n" +
+      "• Click 1X or 2X to read at a relaxed speaking pace.\n" +
       "• The background is 100% invisible so only the text floats over your screen.\n" +
-      "• Move your mouse over this window anytime to show controls or adjust settings.\n\n" +
+      "• Move your mouse over this window anytime to show controls.\n\n" +
       "You are ready to deliver your presentation with full confidence!";
 
     let config = {};
     let isPlaying = false;
-    let speed = 3;
+    let speed = 2.0; // Default comfortable reading speed (2X)
+    let userAdjustedSpeed = false;
     let fontSize = 24;
     let isMirrored = false;
     let showGuide = false;
@@ -328,6 +379,49 @@
     const speedLabel = document.getElementById('speed-label');
     const modeBadge = document.getElementById('mode-badge');
     const readingGuide = document.getElementById('reading-guide');
+    const speedPills = document.querySelectorAll('.btn-speed-pill');
+
+    function updateSpeedUI() {
+      // Format: integer like "1X", "2X", or decimal like "1.5X"
+      const formatted = (speed % 1 === 0) ? `${speed}X` : `${speed.toFixed(1)}X`;
+      speedLabel.textContent = formatted;
+
+      // Update pill active classes
+      speedPills.forEach(pill => {
+        const pillVal = parseFloat(pill.getAttribute('data-speed'));
+        if (pillVal === speed) {
+          pill.classList.add('active');
+        } else {
+          pill.classList.remove('active');
+        }
+      });
+    }
+
+    function setSpeed(newSpeed) {
+      userAdjustedSpeed = true;
+      // Allow speed between 0.5x and 15x
+      speed = Math.max(0.5, Math.min(15, Math.round(newSpeed * 2) / 2));
+      updateSpeedUI();
+    }
+
+    // Attach click listener to each speed pill: 1X, 2X, 3X, 4X, 5X
+    speedPills.forEach(pill => {
+      pill.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const val = parseFloat(pill.getAttribute('data-speed'));
+        setSpeed(val);
+      });
+    });
+
+    document.getElementById('btn-slower').onclick = (e) => {
+      e.stopPropagation();
+      setSpeed(speed - 0.5);
+    };
+
+    document.getElementById('btn-faster').onclick = (e) => {
+      e.stopPropagation();
+      setSpeed(speed + 0.5);
+    };
 
     function applyMode(mode) {
       container.classList.remove('mode-invisible', 'mode-glass', 'mode-solid');
@@ -352,7 +446,6 @@
       container.classList.remove('controls-faded');
       clearTimeout(hideTimer);
       if (modeIdx === 0 && isPlaying) {
-        // In invisible mode, fade controls out after 2.5s while playing
         hideTimer = setTimeout(() => {
           container.classList.add('controls-faded');
         }, 2500);
@@ -374,14 +467,22 @@
         : DEFAULT_GUIDE_TEXT;
       contentEl.textContent = text;
 
-      speed = Math.max(1, Math.min(20, config.speed || 3));
+      // Only take speed from config if user hasn't explicitly set it
+      if (!userAdjustedSpeed) {
+        if (typeof config.speed === 'number' && config.speed > 0) {
+          speed = Math.max(0.5, Math.min(15, config.speed));
+        } else {
+          speed = 2.0; // Default to smooth 2X
+        }
+      }
+      updateSpeedUI();
+
       fontSize = Math.max(16, Math.min(60, config.fontSize || 24));
       isMirrored = !!config.mirrorMode;
 
       contentEl.style.fontSize = fontSize + 'px';
       if (config.textColor) contentEl.style.color = config.textColor;
 
-      // Check if caller requested specific opacity
       if (typeof config.opacity === 'number') {
         if (config.opacity <= 0.1) {
           modeIdx = 0; // invisible
@@ -398,8 +499,6 @@
       } else {
         contentEl.classList.remove('mirrored');
       }
-
-      speedLabel.textContent = speed + 'x';
 
       if (config.scrollPosition) {
         wrap.scrollTop = config.scrollPosition;
@@ -443,7 +542,8 @@
       const delta = (time - lastTime) / 1000;
       lastTime = time;
 
-      const pxPerSec = speed * 28;
+      // Smooth scroll rate: 1X = 18 px/sec, 2X = 36 px/sec, 3X = 54 px/sec
+      const pxPerSec = speed * 18;
       wrap.scrollTop += pxPerSec * delta;
 
       if (ipc) {
@@ -465,9 +565,7 @@
 
     playBtn.onclick = togglePlay;
 
-    // Click on the text area toggles Play/Pause
     wrap.onclick = (e) => {
-      // Don't trigger if user is dragging or clicking buttons
       if (e.target === contentEl || e.target === wrap) {
         togglePlay();
       }
@@ -497,16 +595,6 @@
       }
     };
 
-    document.getElementById('btn-faster').onclick = () => {
-      speed = Math.min(20, speed + 1);
-      speedLabel.textContent = speed + 'x';
-    };
-
-    document.getElementById('btn-slower').onclick = () => {
-      speed = Math.max(1, speed - 1);
-      speedLabel.textContent = speed + 'x';
-    };
-
     document.getElementById('btn-font-plus').onclick = () => {
       fontSize = Math.min(60, fontSize + 2);
       contentEl.style.fontSize = fontSize + 'px';
@@ -534,11 +622,19 @@
         e.preventDefault();
         togglePlay();
       } else if (e.code === 'ArrowUp') {
-        speed = Math.min(20, speed + 1);
-        speedLabel.textContent = speed + 'x';
+        setSpeed(speed + 0.5);
       } else if (e.code === 'ArrowDown') {
-        speed = Math.max(1, speed - 1);
-        speedLabel.textContent = speed + 'x';
+        setSpeed(speed - 0.5);
+      } else if (e.code === 'Digit1') {
+        setSpeed(1.0);
+      } else if (e.code === 'Digit2') {
+        setSpeed(2.0);
+      } else if (e.code === 'Digit3') {
+        setSpeed(3.0);
+      } else if (e.code === 'Digit4') {
+        setSpeed(4.0);
+      } else if (e.code === 'Digit5') {
+        setSpeed(5.0);
       } else if (e.code === 'KeyI') {
         modeIdx = (modeIdx + 1) % modes.length;
         applyMode(modes[modeIdx]);
