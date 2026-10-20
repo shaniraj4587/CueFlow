@@ -36,7 +36,7 @@ Choose the edition that best suits your workflow:
 |---|---|---|
 | **Windows Installer** | 👉 **[Download CueFlow Setup 1.0.0.exe](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.Setup.1.0.0.exe)** | Standard NSIS installer with Start Menu and Desktop shortcuts. |
 | **Standalone Portable** | 👉 **[Download CueFlow 1.0.0.exe](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.1.0.0.exe)** | Single-file portable `.exe`. No installation required, runs directly from anywhere (USB drive, Desktop). |
-| **Portable ZIP** | 👉 **[Download CueFlow-1.0.0-win-portable.zip](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-1.0.0-win-portable.zip)** | Unpack-and-run standalone archive with all binaries included. |
+| **Portable ZIP** | 👉 **[Download CueFlow-1.0.0-win.zip](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-1.0.0-win.zip)** | Unpack-and-run standalone archive with all binaries included. |
 
 #### Windows Installation & Running Guide:
 1. **Windows Installer**: Download `CueFlow Setup 1.0.0.exe`, double-click to install, and launch from your Desktop or Start Menu.
