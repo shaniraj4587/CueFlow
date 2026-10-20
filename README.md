@@ -1,79 +1,139 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# CueFlow — Professional Android Teleprompter
 
-# Getting Started
+<p align="center">
+  <img src="src/assets/icon.png" width="120" height="120" alt="CueFlow Logo" style="border-radius: 24px;" />
+</p>
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+<p align="center">
+  <strong>An offline-first, professional Android teleprompter designed for flawless speeches, presentations, online meetings, and video creation.</strong>
+</p>
 
-## Step 1: Start the Metro Server
+<p align="center">
+  <a href="https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.apk">
+    <img src="https://img.shields.io/badge/Download-CueFlow%20APK-CF5418?style=for-the-badge&logo=android&logoColor=white" alt="Download APK" />
+  </a>
+  <a href="https://github.com/shaniraj4587/CueFlow/releases/latest">
+    <img src="https://img.shields.io/badge/Release-v1.0.0-202631?style=for-the-badge&logo=github&logoColor=white" alt="Latest Release" />
+  </a>
+  <img src="https://img.shields.io/badge/Platform-Android%207.0%2B-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android Support" />
+  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License" />
+</p>
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+---
 
-To start Metro, run the following command from the _root_ of your React Native project:
+## 📥 Download and Install
 
+Anyone with an Android phone or tablet can download and use CueFlow right now for free:
+
+### ⚡ Direct Download
+👉 **[Download CueFlow.apk (Latest Version)](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.apk)** (51.0 MB)
+
+### 📲 Quick Installation Steps:
+1. Tap the **Download CueFlow.apk** link above on your Android phone or tablet.
+2. Once the download finishes, open your **Downloads** folder (or tap the download notification).
+3. Tap **`CueFlow.apk`**.
+4. If prompted with *"For your security, your phone is not allowed to install unknown apps from this source"*, tap **Settings** and toggle **Allow from this source**.
+5. Tap **Install** and then tap **Open**.
+6. Enjoy seamless teleprompting!
+
+---
+
+## ✨ Key Features
+
+### 🎙️ Real-Time Voice Follow (Speech Recognition)
+* Automatically tracks spoken delivery and scrolls the script at your exact natural speaking speed.
+* Continuous 60fps velocity engine with sliding-window Words-Per-Minute (WPM) calculation.
+* Pauses smoothly when you take a pause, and glides forward as you speak.
+* Supports **English** and **Hindi (`hi-IN`)** speech recognition models.
+* Audio is processed strictly in real-time on-device; no recordings are ever saved or transmitted.
+
+### 📐 Interactive Resizable Floating Teleprompter
+* **Floating Window Overlay**: Floats directly on top of your favourite camera, Zoom, Microsoft Teams, Google Meet, or video recording app.
+* **Continuous Drag Resize Handle (`↘`)**: Grab and drag the bottom-right corner to freely resize width and height to any custom dimensions.
+* **Instant Size Presets (`⤢`)**: 1-tap cycler between **Compact** (280×220), **Standard** (360×320), **Large** (460×420), and **Full Width**.
+* **Remembers Your Size**: Custom dimensions are automatically saved to device storage and preserved across sessions.
+* **Transparent Background**: Adjustable overlay opacity (20% to 100%) so you can see your subject or meeting attendees underneath.
+
+### 🇮🇳 Full Bilingual Interface (English & हिंदी)
+* Complete 1-tap language switching across the entire app.
+* Every button, slider, dialog, menu, and status bar updates instantly in real time.
+* Devanagari Unicode tokenization preserving all Indic vowel marks (matras, halants, anusvaras).
+* Bundled sample scripts in both English and Hindi.
+
+### 📱 Samsung Galaxy Tab S9 FE & Tablet Optimization
+* **Responsive Layouts**: Dynamic multi-column responsive grid on tablet screens.
+* **Proportional Scroll Anchoring**: Rotating between portrait and landscape preserves exact percentage reading position with zero jumps.
+* **Reading Margins**: Constrained reading column (`maxWidth: 860`) prevents wide lines from stretching awkwardly across large 11"–14" tablet screens.
+
+### 👓 Professional Reading & Mirror Modes
+* **Mirror Mode (Horizontal Flip)**: Flip text horizontally for beam-splitter prompter glass rigs.
+* **Pacing Controls**: Adjustable scrolling speed (1x–20x), countdown before playback (0–10s), and deliberate blank-line pause durations.
+* **Custom Typography**: Dynamic text size (18–72pt), line height, letter spacing, font style (Modern, Mono, Serif), and text alignment.
+* **Reading Guides**: Highlight window, focal guide line, or subtle reading band.
+
+### 🔒 100% Privacy & Zero Ads
+* **No Advertisements**: Completely free with zero ads or tracking SDKs.
+* **100% Offline Local Storage**: All scripts are saved directly on your device storage. No account required, no cloud sync, no tracking.
+* **Zero Camera Permissions**: The app does not access your camera — it is built to run alongside your favorite recording device or camera app.
+
+---
+
+## 🛠️ Tech Stack & Architecture
+
+* **Framework**: React Native 0.76+ (TypeScript) with Hermes Bytecode Engine
+* **Native Android (Kotlin)**:
+  * `FloatingTeleprompterService.kt`: WindowManager-based interactive overlay with multi-touch drag resizing, gesture controls, and SharedPreferences persistence.
+  * `VoiceFollowModule.kt`: Android `SpeechRecognizer` integration with resilient Samsung engine timeout recovery and language selection.
+  * `FileAccessModule.kt`: Android Storage Access Framework (SAF) document picker for `.txt` file imports/exports.
+  * `KeepAwakeModule.kt`: Window flag wake-lock manager for presentations.
+* **State Management**: Reactive global publish/subscribe architecture for synchronous multi-screen updates.
+* **Testing**: Comprehensive Jest test suite with 100% pass rate (32/32 tests).
+
+---
+
+## 💻 Local Development Setup
+
+To build and run CueFlow locally on your machine:
+
+### Prerequisites:
+* Node.js 18+ and npm
+* Android Studio with Android SDK (API 34)
+* Java Development Kit (JDK 17)
+
+### Steps:
 ```bash
-# using npm
-npm start
+# Clone the repository
+git clone https://github.com/shaniraj4587/CueFlow.git
+cd CueFlow
 
-# OR using Yarn
-yarn start
-```
+# Install dependencies
+npm install
 
-## Step 2: Start your Application
+# Run unit tests
+npm test
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
-
-```bash
-# using npm
+# Run on connected Android device or emulator
 npm run android
-
-# OR using Yarn
-yarn android
 ```
 
-### For iOS
-
+### Build Production Release APK:
 ```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+cd android
+./gradlew assembleRelease
+# Output: android/app/build/outputs/apk/release/app-release.apk
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+---
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+## 📄 Privacy Policy
 
-## Step 3: Modifying your App
+CueFlow values user privacy above all else. Review our complete [PRIVACY_POLICY.md](PRIVACY_POLICY.md) for full details:
+* Scripts remain strictly on your physical device.
+* Audio data from Voice Follow is processed in real time and never stored, saved, or uploaded.
+* No cameras, analytics, or external trackers are utilized.
 
-Now that you have successfully run the app, let's modify it.
+---
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+## 📜 License
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+This project is licensed under the MIT License - see the LICENSE file for details.
