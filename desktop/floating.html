@@ -502,6 +502,7 @@
 
       if (config.scrollPosition) {
         wrap.scrollTop = config.scrollPosition;
+        floatScrollPos = config.scrollPosition;
       }
     };
 
@@ -522,11 +523,20 @@
       window.initOverlay({ content: DEFAULT_GUIDE_TEXT });
     }
 
+    let floatScrollPos = 0;
+
+    wrap.addEventListener('scroll', () => {
+      if (!isPlaying) {
+        floatScrollPos = wrap.scrollTop;
+      }
+    });
+
     function togglePlay() {
       isPlaying = !isPlaying;
       playBtn.textContent = isPlaying ? '⏸ Pause' : '▶ Play';
       playBtn.style.backgroundColor = isPlaying ? '#10B981' : '#0284C7';
       if (isPlaying) {
+        floatScrollPos = wrap.scrollTop;
         lastTime = performance.now();
         animId = requestAnimationFrame(scrollStep);
         resetHideTimer();
@@ -542,9 +552,15 @@
       const delta = (time - lastTime) / 1000;
       lastTime = time;
 
-      // Smooth scroll rate: 1X = 18 px/sec, 2X = 36 px/sec, 3X = 54 px/sec
-      const pxPerSec = speed * 18;
-      wrap.scrollTop += pxPerSec * delta;
+      // Calibrated speeds in pixels per second:
+      // 1X = 24 px/s (steady, calm presentation pace)
+      // 2X = 44 px/s (natural conversational presentation pace)
+      // 3X = 66 px/s (brisk speaker pace)
+      // 4X = 90 px/s (fast pace)
+      // 5X = 120 px/s (quick review pace)
+      const pxPerSec = speed <= 1 ? 24 * speed : 24 + (speed - 1) * 20;
+      floatScrollPos += pxPerSec * delta;
+      wrap.scrollTop = floatScrollPos;
 
       if (ipc) {
         ipc.send('overlay-scrolled', {
@@ -553,7 +569,7 @@
         });
       }
 
-      if (wrap.scrollTop < wrap.scrollHeight - wrap.clientHeight) {
+      if (wrap.scrollTop < wrap.scrollHeight - wrap.clientHeight - 2) {
         animId = requestAnimationFrame(scrollStep);
       } else {
         isPlaying = false;
@@ -585,6 +601,7 @@
 
     document.getElementById('btn-rewind').onclick = () => {
       wrap.scrollTop = 0;
+      floatScrollPos = 0;
     };
 
     document.getElementById('btn-close').onclick = () => {
