@@ -181,7 +181,8 @@ ipcMain.handle('overlay:launch', (_event, config) => {
     alwaysOnTop: true,
     frame: false,
     transparent: true,
-    hasShadow: true,
+    hasShadow: false,
+    backgroundColor: '#00000000',
     resizable: true,
     webPreferences: {
       nodeIntegration: true,

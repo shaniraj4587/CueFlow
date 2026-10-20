@@ -5,13 +5,23 @@ import { name as appName } from './app.json';
 const style = document.createElement('style');
 style.textContent = `
   html, body, #root {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
     background-color: #0F172A;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  #root > div {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 0% !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
   }
   * {
     box-sizing: border-box;

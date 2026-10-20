@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CueFlow Floating Overlay</title>
+  <title>CueFlow Floating Teleprompter</title>
   <style>
     * {
       box-sizing: border-box;
@@ -15,30 +15,64 @@
       height: 100%;
       overflow: hidden;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: transparent;
+      background: transparent !important;
+      background-color: transparent !important;
     }
     #container {
       width: 100%;
       height: 100%;
       display: flex;
       flex-direction: column;
-      border-radius: 12px;
+      border-radius: 10px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65);
-      background-color: rgba(15, 23, 42, 0.88);
-      backdrop-filter: blur(20px);
+      position: relative;
+      background-color: transparent;
+      border: 1px solid transparent;
+      box-shadow: none;
+      transition: background-color 0.25s ease, border 0.25s ease;
     }
+
+    /* Mode: Invisible (Default) */
+    #container.mode-invisible {
+      background-color: transparent !important;
+      border: 1px dashed transparent;
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+    }
+    #container.mode-invisible:hover {
+      border: 1px dashed rgba(255, 255, 255, 0.25);
+    }
+
+    /* Mode: Glass */
+    #container.mode-glass {
+      background-color: rgba(15, 23, 42, 0.35) !important;
+      border: 1px solid rgba(255, 255, 255, 0.18) !important;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+      backdrop-filter: blur(12px) !important;
+    }
+
+    /* Mode: Solid Dark */
+    #container.mode-solid {
+      background-color: rgba(15, 23, 42, 0.88) !important;
+      border: 1px solid rgba(255, 255, 255, 0.22) !important;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65) !important;
+      backdrop-filter: blur(20px) !important;
+    }
+
+    /* Header Bar */
     #header {
-      height: 40px;
-      background: rgba(0, 0, 0, 0.5);
+      height: 38px;
+      background: rgba(10, 15, 28, 0.75);
+      backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 12px;
+      padding: 0 10px;
       -webkit-app-region: drag;
       border-bottom: 1px solid rgba(255, 255, 255, 0.12);
       cursor: move;
+      transition: opacity 0.3s ease;
+      z-index: 10;
     }
     #title-group {
       display: flex;
@@ -50,32 +84,41 @@
       font-size: 10px;
       background: #0284C7;
       color: #fff;
-      padding: 1px 5px;
+      padding: 2px 6px;
       border-radius: 4px;
       font-weight: 700;
       letter-spacing: 0.5px;
     }
+    .mode-badge {
+      font-size: 10px;
+      background: rgba(16, 185, 129, 0.25);
+      border: 1px solid #10B981;
+      color: #34D399;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
     #title {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       color: #F8FAFC;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 220px;
+      max-width: 170px;
     }
     .header-btns {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       -webkit-app-region: no-drag;
     }
     .btn {
       background: rgba(255, 255, 255, 0.14);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       color: #F8FAFC;
-      border-radius: 6px;
-      padding: 4px 9px;
+      border-radius: 5px;
+      padding: 3px 8px;
       font-size: 11px;
       font-weight: 600;
       cursor: pointer;
@@ -87,6 +130,11 @@
     .btn:active {
       transform: scale(0.96);
     }
+    .btn-toggle-active {
+      background: #0284C7 !important;
+      border-color: #38BDF8 !important;
+      color: #FFFFFF !important;
+    }
     .btn-close {
       background: #EF4444;
       border-color: #DC2626;
@@ -95,49 +143,78 @@
     .btn-close:hover {
       background: #DC2626;
     }
+
+    /* Content Area */
     #content-wrap {
       flex: 1;
       overflow-y: scroll;
-      padding: 24px 20px;
+      padding: 20px 18px;
       position: relative;
     }
     #content-wrap::-webkit-scrollbar {
-      width: 5px;
+      width: 4px;
     }
     #content-wrap::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.25);
-      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
     }
     #content {
       white-space: pre-wrap;
       line-height: 1.65;
-      color: #F8FAFC;
+      color: #FFFFFF;
       font-size: 24px;
+      font-weight: 600;
+      text-shadow:
+        -1px -1px 0 rgba(0, 0, 0, 0.95),  
+         1px -1px 0 rgba(0, 0, 0, 0.95),
+        -1px  1px 0 rgba(0, 0, 0, 0.95),
+         1px  1px 0 rgba(0, 0, 0, 0.95),
+         0 2px 6px rgba(0, 0, 0, 0.95),
+         0 0 14px rgba(0, 0, 0, 0.9);
       transition: font-size 0.1s;
     }
     .mirrored {
       transform: scaleX(-1);
     }
+
+    /* Reading Guide Line */
+    #reading-guide {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      top: 45%;
+      height: 2px;
+      background: rgba(2, 132, 199, 0.55);
+      box-shadow: 0 0 8px rgba(2, 132, 199, 0.7);
+      pointer-events: none;
+      display: none;
+      z-index: 5;
+    }
+
+    /* Footer Controls */
     #footer {
-      height: 44px;
-      background: rgba(0, 0, 0, 0.5);
+      height: 40px;
+      background: rgba(10, 15, 28, 0.75);
+      backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 12px;
+      padding: 0 10px;
       border-top: 1px solid rgba(255, 255, 255, 0.12);
       -webkit-app-region: no-drag;
+      transition: opacity 0.3s ease;
+      z-index: 10;
     }
     .controls {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
     .btn-play {
       background: #0284C7;
       border-color: #0369A1;
-      padding: 5px 12px;
-      font-size: 12px;
+      padding: 4px 11px;
+      font-size: 11px;
     }
     .btn-play:hover {
       background: #0369A1;
@@ -146,35 +223,45 @@
       font-size: 11px;
       color: #94A3B8;
       font-weight: 600;
-      min-width: 28px;
+      min-width: 24px;
       text-align: center;
     }
-    .opacity-tag {
-      font-size: 11px;
-      color: #94A3B8;
-      font-weight: 500;
-    }
+
+    /* Resize Handle */
     #resize-handle {
       position: absolute;
       right: 0;
       bottom: 0;
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       cursor: nwse-resize;
       -webkit-app-region: no-drag;
+      background: linear-gradient(135deg, transparent 50%, rgba(255,255,255,0.4) 50%);
+      z-index: 20;
+    }
+
+    /* Auto-Hide Controls when Inactive in Invisible Mode */
+    .controls-faded #header,
+    .controls-faded #footer {
+      opacity: 0;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
-  <div id="container">
+  <div id="container" class="mode-invisible">
+    <div id="reading-guide"></div>
+
     <div id="header">
       <div id="title-group">
         <span class="badge">PROMPTER</span>
-        <span id="title">CueFlow Overlay</span>
+        <span id="mode-badge" class="mode-badge">👻 INVISIBLE</span>
+        <span id="title">CueFlow Invisible Overlay</span>
       </div>
       <div class="header-btns">
-        <button class="btn" id="btn-mirror" title="Toggle Mirror Glass Mode">⇋ Flip</button>
-        <button class="btn" id="btn-opacity" title="Adjust Transparency">👁 Opacity</button>
+        <button class="btn" id="btn-mode" title="Switch Mode: Invisible / Glass / Solid">👻 Mode</button>
+        <button class="btn" id="btn-guide" title="Toggle Reading Guide Line">━ Line</button>
+        <button class="btn" id="btn-mirror" title="Toggle Mirror Mode">⇋ Flip</button>
         <button class="btn btn-close" id="btn-close" title="Close Overlay">✕</button>
       </div>
     </div>
@@ -197,6 +284,8 @@
         <button class="btn" id="btn-font-plus" title="Larger Font">A+</button>
       </div>
     </div>
+
+    <div id="resize-handle"></div>
   </div>
 
   <script>
@@ -208,28 +297,83 @@
       console.warn('Electron IPC not available directly');
     }
 
+    const DEFAULT_GUIDE_TEXT = 
+      "CueFlow Floating Teleprompter (Invisible Mode)\n\n" +
+      "• Drag this window by the top header bar anywhere over your camera or meeting app.\n" +
+      "• Spacebar or '▶ Play' button starts and pauses smooth scrolling.\n" +
+      "• Up/Down arrow keys adjust your speaking speed.\n" +
+      "• The background is 100% invisible so only the text floats over your screen.\n" +
+      "• Move your mouse over this window anytime to show controls or adjust settings.\n\n" +
+      "You are ready to deliver your presentation with full confidence!";
+
     let config = {};
     let isPlaying = false;
     let speed = 3;
     let fontSize = 24;
     let isMirrored = false;
-    let opacityLevels = [0.90, 0.70, 0.45, 0.25];
-    let opacityIdx = 0;
+    let showGuide = false;
     let animId = null;
     let lastTime = performance.now();
+    let hideTimer = null;
 
+    // Modes: 'invisible' (0% opacity, borderless) -> 'glass' (frosted 35%) -> 'solid' (88%)
+    const modes = ['invisible', 'glass', 'solid'];
+    let modeIdx = 0; // Starts in 'invisible' mode
+
+    const container = document.getElementById('container');
     const wrap = document.getElementById('content-wrap');
     const contentEl = document.getElementById('content');
     const titleEl = document.getElementById('title');
     const playBtn = document.getElementById('btn-play');
     const speedLabel = document.getElementById('speed-label');
-    const container = document.getElementById('container');
+    const modeBadge = document.getElementById('mode-badge');
+    const readingGuide = document.getElementById('reading-guide');
+
+    function applyMode(mode) {
+      container.classList.remove('mode-invisible', 'mode-glass', 'mode-solid');
+      container.classList.add(`mode-${mode}`);
+
+      if (mode === 'invisible') {
+        modeBadge.textContent = '👻 INVISIBLE';
+        modeBadge.style.color = '#34D399';
+        modeBadge.style.borderColor = '#10B981';
+      } else if (mode === 'glass') {
+        modeBadge.textContent = '🪟 GLASS';
+        modeBadge.style.color = '#38BDF8';
+        modeBadge.style.borderColor = '#0284C7';
+      } else {
+        modeBadge.textContent = '⬛ SOLID';
+        modeBadge.style.color = '#F8FAFC';
+        modeBadge.style.borderColor = '#64748B';
+      }
+    }
+
+    function resetHideTimer() {
+      container.classList.remove('controls-faded');
+      clearTimeout(hideTimer);
+      if (modeIdx === 0 && isPlaying) {
+        // In invisible mode, fade controls out after 2.5s while playing
+        hideTimer = setTimeout(() => {
+          container.classList.add('controls-faded');
+        }, 2500);
+      }
+    }
+
+    window.addEventListener('mousemove', resetHideTimer);
+    window.addEventListener('mouseenter', () => {
+      container.classList.remove('controls-faded');
+    });
 
     window.initOverlay = function(data) {
       if (!data) return;
       config = data;
       titleEl.textContent = config.title || 'CueFlow Overlay';
-      contentEl.textContent = config.content || 'No script content provided';
+
+      const text = (config.content && config.content.trim().length > 0)
+        ? config.content
+        : DEFAULT_GUIDE_TEXT;
+      contentEl.textContent = text;
+
       speed = Math.max(1, Math.min(20, config.speed || 3));
       fontSize = Math.max(16, Math.min(60, config.fontSize || 24));
       isMirrored = !!config.mirrorMode;
@@ -237,9 +381,18 @@
       contentEl.style.fontSize = fontSize + 'px';
       if (config.textColor) contentEl.style.color = config.textColor;
 
-      if (config.opacity && typeof config.opacity === 'number') {
-        container.style.backgroundColor = `rgba(15, 23, 42, ${Math.max(0.2, config.opacity)})`;
+      // Check if caller requested specific opacity
+      if (typeof config.opacity === 'number') {
+        if (config.opacity <= 0.1) {
+          modeIdx = 0; // invisible
+        } else if (config.opacity <= 0.5) {
+          modeIdx = 1; // glass
+        } else {
+          modeIdx = 2; // solid
+        }
       }
+      applyMode(modes[modeIdx]);
+
       if (isMirrored) {
         contentEl.classList.add('mirrored');
       } else {
@@ -257,12 +410,17 @@
       ipc.on('init-overlay', (event, data) => {
         window.initOverlay(data);
       });
-      // Request config in case it was sent before page finished rendering
       ipc.invoke('overlay:getConfig').then(data => {
-        if (data && data.content) {
+        if (data && (data.content || data.title)) {
           window.initOverlay(data);
+        } else {
+          window.initOverlay({ content: DEFAULT_GUIDE_TEXT });
         }
-      }).catch(() => {});
+      }).catch(() => {
+        window.initOverlay({ content: DEFAULT_GUIDE_TEXT });
+      });
+    } else {
+      window.initOverlay({ content: DEFAULT_GUIDE_TEXT });
     }
 
     function togglePlay() {
@@ -272,8 +430,11 @@
       if (isPlaying) {
         lastTime = performance.now();
         animId = requestAnimationFrame(scrollStep);
+        resetHideTimer();
       } else {
         cancelAnimationFrame(animId);
+        container.classList.remove('controls-faded');
+        clearTimeout(hideTimer);
       }
     }
 
@@ -281,7 +442,7 @@
       if (!isPlaying) return;
       const delta = (time - lastTime) / 1000;
       lastTime = time;
-      
+
       const pxPerSec = speed * 28;
       wrap.scrollTop += pxPerSec * delta;
 
@@ -298,10 +459,31 @@
         isPlaying = false;
         playBtn.textContent = '▶ Play';
         playBtn.style.backgroundColor = '#0284C7';
+        container.classList.remove('controls-faded');
       }
     }
 
     playBtn.onclick = togglePlay;
+
+    // Click on the text area toggles Play/Pause
+    wrap.onclick = (e) => {
+      // Don't trigger if user is dragging or clicking buttons
+      if (e.target === contentEl || e.target === wrap) {
+        togglePlay();
+      }
+    };
+
+    document.getElementById('btn-mode').onclick = () => {
+      modeIdx = (modeIdx + 1) % modes.length;
+      applyMode(modes[modeIdx]);
+      resetHideTimer();
+    };
+
+    document.getElementById('btn-guide').onclick = () => {
+      showGuide = !showGuide;
+      readingGuide.style.display = showGuide ? 'block' : 'none';
+      document.getElementById('btn-guide').classList.toggle('btn-toggle-active', showGuide);
+    };
 
     document.getElementById('btn-rewind').onclick = () => {
       wrap.scrollTop = 0;
@@ -339,15 +521,11 @@
       isMirrored = !isMirrored;
       if (isMirrored) {
         contentEl.classList.add('mirrored');
+        document.getElementById('btn-mirror').classList.add('btn-toggle-active');
       } else {
         contentEl.classList.remove('mirrored');
+        document.getElementById('btn-mirror').classList.remove('btn-toggle-active');
       }
-    };
-
-    document.getElementById('btn-opacity').onclick = () => {
-      opacityIdx = (opacityIdx + 1) % opacityLevels.length;
-      const op = opacityLevels[opacityIdx];
-      container.style.backgroundColor = `rgba(15, 23, 42, ${op})`;
     };
 
     // Keyboard controls in overlay
@@ -361,6 +539,11 @@
       } else if (e.code === 'ArrowDown') {
         speed = Math.max(1, speed - 1);
         speedLabel.textContent = speed + 'x';
+      } else if (e.code === 'KeyI') {
+        modeIdx = (modeIdx + 1) % modes.length;
+        applyMode(modes[modeIdx]);
+      } else if (e.code === 'KeyF') {
+        document.getElementById('btn-mirror').click();
       } else if (e.code === 'Escape') {
         if (ipc) ipc.send('close-overlay-window');
       }

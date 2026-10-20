@@ -19,6 +19,7 @@ import { ScriptCard } from '../components/ScriptCard';
 import { EmptyState } from '../components/EmptyState';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { NativeOverlayService } from '../services/NativeOverlayService';
+import { SAMPLE_SCRIPT_CONTENT } from '../services/ScriptStorage';
 import { typography } from '../theme/typography';
 import { spacing, borderRadius, elevation } from '../theme/spacing';
 
@@ -42,17 +43,24 @@ export const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const maxContentWidth = width >= 600 ? Math.min(width * 0.94, 1020) : '100%';
 
   const handleLaunchFirstScriptOverlay = async () => {
-    const target = filteredScripts[0] || scripts[0];
-    if (target) {
+    const targetWithText = scripts.find(s => s.content && s.content.trim().length > 0);
+    const target = targetWithText || filteredScripts[0] || scripts[0];
+    if (target && target.content && target.content.trim().length > 0) {
       await NativeOverlayService.launch(
         target.id,
-        target.title,
+        target.title || 'CueFlow Overlay',
         target.content,
         settings.floating,
         target.scrollPosition || 0
       );
     } else {
-      navigation.navigate('Editor', {});
+      await NativeOverlayService.launch(
+        'sample-default',
+        'Welcome to CueFlow',
+        SAMPLE_SCRIPT_CONTENT,
+        settings.floating,
+        0
+      );
     }
   };
 
@@ -130,6 +138,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }) => {
       <FlatList
         data={filteredScripts}
         keyExtractor={item => item.id}
+        style={styles.list}
         contentContainerStyle={[
           styles.listContent,
           { maxWidth: maxContentWidth, width: '100%', alignSelf: 'center' },
@@ -201,6 +210,11 @@ export const HomeScreen: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+  },
+  list: {
+    flex: 1,
+    width: '100%',
+    minHeight: 0,
   },
   header: {
     paddingHorizontal: spacing.lg,
