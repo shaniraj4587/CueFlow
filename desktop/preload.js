@@ -4,6 +4,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   keepAwake: (activate) => ipcRenderer.invoke('app:keepAwake', activate),
   importTextDocument: () => ipcRenderer.invoke('app:importTextDocument'),
   exportTextFile: (title, content) => ipcRenderer.invoke('app:exportTextFile', { title, content }),
+  saveStoredScripts: (json) => ipcRenderer.invoke('app:saveStoredScripts', json),
+  loadStoredScripts: () => ipcRenderer.invoke('app:loadStoredScripts'),
   launchOverlay: (config) => ipcRenderer.invoke('overlay:launch', config),
   closeOverlay: () => ipcRenderer.invoke('overlay:close'),
   isOverlayRunning: () => ipcRenderer.invoke('overlay:isRunning'),

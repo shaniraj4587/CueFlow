@@ -14,7 +14,7 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       background: transparent;
     }
     #container {
@@ -24,20 +24,36 @@
       flex-direction: column;
       border-radius: 12px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-      background-color: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65);
+      background-color: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(20px);
     }
     #header {
-      height: 38px;
-      background: rgba(0, 0, 0, 0.4);
+      height: 40px;
+      background: rgba(0, 0, 0, 0.5);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 10px;
+      padding: 0 12px;
       -webkit-app-region: drag;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      cursor: move;
+    }
+    #title-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow: hidden;
+    }
+    .badge {
+      font-size: 10px;
+      background: #0284C7;
+      color: #fff;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
     }
     #title {
       font-size: 13px;
@@ -46,7 +62,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 180px;
+      max-width: 220px;
     }
     .header-btns {
       display: flex;
@@ -55,21 +71,25 @@
       -webkit-app-region: no-drag;
     }
     .btn {
-      background: rgba(255, 255, 255, 0.12);
-      border: none;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       color: #F8FAFC;
       border-radius: 6px;
-      padding: 3px 8px;
+      padding: 4px 9px;
       font-size: 11px;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.15s;
+      transition: all 0.15s;
     }
     .btn:hover {
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.28);
+    }
+    .btn:active {
+      transform: scale(0.96);
     }
     .btn-close {
       background: #EF4444;
+      border-color: #DC2626;
       color: white;
     }
     .btn-close:hover {
@@ -78,82 +98,125 @@
     #content-wrap {
       flex: 1;
       overflow-y: scroll;
-      padding: 20px 16px;
+      padding: 24px 20px;
       position: relative;
     }
     #content-wrap::-webkit-scrollbar {
-      width: 4px;
+      width: 5px;
     }
     #content-wrap::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 3px;
     }
     #content {
       white-space: pre-wrap;
-      line-height: 1.6;
+      line-height: 1.65;
       color: #F8FAFC;
+      font-size: 24px;
+      transition: font-size 0.1s;
     }
     .mirrored {
       transform: scaleX(-1);
     }
     #footer {
-      height: 38px;
-      background: rgba(0, 0, 0, 0.4);
+      height: 44px;
+      background: rgba(0, 0, 0, 0.5);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 10px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
       -webkit-app-region: no-drag;
     }
     .controls {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+    }
+    .btn-play {
+      background: #0284C7;
+      border-color: #0369A1;
+      padding: 5px 12px;
+      font-size: 12px;
+    }
+    .btn-play:hover {
+      background: #0369A1;
     }
     .speed-tag {
       font-size: 11px;
       color: #94A3B8;
+      font-weight: 600;
+      min-width: 28px;
+      text-align: center;
+    }
+    .opacity-tag {
+      font-size: 11px;
+      color: #94A3B8;
       font-weight: 500;
+    }
+    #resize-handle {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 16px;
+      height: 16px;
+      cursor: nwse-resize;
+      -webkit-app-region: no-drag;
     }
   </style>
 </head>
 <body>
   <div id="container">
     <div id="header">
-      <span id="title">CueFlow Overlay</span>
+      <div id="title-group">
+        <span class="badge">PROMPTER</span>
+        <span id="title">CueFlow Overlay</span>
+      </div>
       <div class="header-btns">
-        <button class="btn" id="btn-mirror" title="Toggle Mirror">⇋ Flip</button>
-        <button class="btn btn-close" id="btn-close" title="Close">✕</button>
+        <button class="btn" id="btn-mirror" title="Toggle Mirror Glass Mode">⇋ Flip</button>
+        <button class="btn" id="btn-opacity" title="Adjust Transparency">👁 Opacity</button>
+        <button class="btn btn-close" id="btn-close" title="Close Overlay">✕</button>
       </div>
     </div>
+
     <div id="content-wrap">
-      <div id="content"></div>
-      <div style="height: 300px;"></div>
+      <div id="content">Loading script...</div>
+      <div style="height: 380px;"></div>
     </div>
+
     <div id="footer">
       <div class="controls">
-        <button class="btn" id="btn-play">▶ Play</button>
-        <button class="btn" id="btn-slower">-</button>
+        <button class="btn btn-play" id="btn-play">▶ Play</button>
+        <button class="btn" id="btn-rewind" title="Rewind to Top">↺ Top</button>
+        <button class="btn" id="btn-slower" title="Decrease Speed">-</button>
         <span class="speed-tag" id="speed-label">3x</span>
-        <button class="btn" id="btn-faster">+</button>
+        <button class="btn" id="btn-faster" title="Increase Speed">+</button>
       </div>
       <div class="controls">
-        <button class="btn" id="btn-font-minus">A-</button>
-        <button class="btn" id="btn-font-plus">A+</button>
+        <button class="btn" id="btn-font-minus" title="Smaller Font">A-</button>
+        <button class="btn" id="btn-font-plus" title="Larger Font">A+</button>
       </div>
     </div>
   </div>
 
   <script>
-    const { ipcRenderer } = require('electron');
+    let ipc = null;
+    try {
+      const electron = require('electron');
+      ipc = electron.ipcRenderer;
+    } catch (e) {
+      console.warn('Electron IPC not available directly');
+    }
+
     let config = {};
     let isPlaying = false;
     let speed = 3;
     let fontSize = 24;
     let isMirrored = false;
-    let scrollPos = 0;
+    let opacityLevels = [0.90, 0.70, 0.45, 0.25];
+    let opacityIdx = 0;
     let animId = null;
+    let lastTime = performance.now();
 
     const wrap = document.getElementById('content-wrap');
     const contentEl = document.getElementById('content');
@@ -162,31 +225,50 @@
     const speedLabel = document.getElementById('speed-label');
     const container = document.getElementById('container');
 
-    ipcRenderer.on('init-overlay', (event, data) => {
-      config = data || {};
+    window.initOverlay = function(data) {
+      if (!data) return;
+      config = data;
       titleEl.textContent = config.title || 'CueFlow Overlay';
-      contentEl.textContent = config.content || '';
+      contentEl.textContent = config.content || 'No script content provided';
       speed = Math.max(1, Math.min(20, config.speed || 3));
       fontSize = Math.max(16, Math.min(60, config.fontSize || 24));
       isMirrored = !!config.mirrorMode;
 
       contentEl.style.fontSize = fontSize + 'px';
       if (config.textColor) contentEl.style.color = config.textColor;
-      if (config.opacity) {
+
+      if (config.opacity && typeof config.opacity === 'number') {
         container.style.backgroundColor = `rgba(15, 23, 42, ${Math.max(0.2, config.opacity)})`;
       }
-      if (isMirrored) contentEl.classList.add('mirrored');
+      if (isMirrored) {
+        contentEl.classList.add('mirrored');
+      } else {
+        contentEl.classList.remove('mirrored');
+      }
 
       speedLabel.textContent = speed + 'x';
 
       if (config.scrollPosition) {
         wrap.scrollTop = config.scrollPosition;
       }
-    });
+    };
+
+    if (ipc) {
+      ipc.on('init-overlay', (event, data) => {
+        window.initOverlay(data);
+      });
+      // Request config in case it was sent before page finished rendering
+      ipc.invoke('overlay:getConfig').then(data => {
+        if (data && data.content) {
+          window.initOverlay(data);
+        }
+      }).catch(() => {});
+    }
 
     function togglePlay() {
       isPlaying = !isPlaying;
       playBtn.textContent = isPlaying ? '⏸ Pause' : '▶ Play';
+      playBtn.style.backgroundColor = isPlaying ? '#10B981' : '#0284C7';
       if (isPlaying) {
         lastTime = performance.now();
         animId = requestAnimationFrame(scrollStep);
@@ -195,7 +277,6 @@
       }
     }
 
-    let lastTime = performance.now();
     function scrollStep(time) {
       if (!isPlaying) return;
       const delta = (time - lastTime) / 1000;
@@ -204,22 +285,34 @@
       const pxPerSec = speed * 28;
       wrap.scrollTop += pxPerSec * delta;
 
-      ipcRenderer.send('overlay-scrolled', {
-        scrollPosition: wrap.scrollTop,
-        totalHeight: wrap.scrollHeight
-      });
+      if (ipc) {
+        ipc.send('overlay-scrolled', {
+          scrollPosition: wrap.scrollTop,
+          totalHeight: wrap.scrollHeight
+        });
+      }
 
       if (wrap.scrollTop < wrap.scrollHeight - wrap.clientHeight) {
         animId = requestAnimationFrame(scrollStep);
       } else {
         isPlaying = false;
         playBtn.textContent = '▶ Play';
+        playBtn.style.backgroundColor = '#0284C7';
       }
     }
 
     playBtn.onclick = togglePlay;
+
+    document.getElementById('btn-rewind').onclick = () => {
+      wrap.scrollTop = 0;
+    };
+
     document.getElementById('btn-close').onclick = () => {
-      ipcRenderer.send('close-overlay-window');
+      if (ipc) {
+        ipc.send('close-overlay-window');
+      } else {
+        window.close();
+      }
     };
 
     document.getElementById('btn-faster').onclick = () => {
@@ -250,6 +343,28 @@
         contentEl.classList.remove('mirrored');
       }
     };
+
+    document.getElementById('btn-opacity').onclick = () => {
+      opacityIdx = (opacityIdx + 1) % opacityLevels.length;
+      const op = opacityLevels[opacityIdx];
+      container.style.backgroundColor = `rgba(15, 23, 42, ${op})`;
+    };
+
+    // Keyboard controls in overlay
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        togglePlay();
+      } else if (e.code === 'ArrowUp') {
+        speed = Math.min(20, speed + 1);
+        speedLabel.textContent = speed + 'x';
+      } else if (e.code === 'ArrowDown') {
+        speed = Math.max(1, speed - 1);
+        speedLabel.textContent = speed + 'x';
+      } else if (e.code === 'Escape') {
+        if (ipc) ipc.send('close-overlay-window');
+      }
+    });
   </script>
 </body>
 </html>

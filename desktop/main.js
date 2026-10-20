@@ -5,11 +5,21 @@ const fs = require('fs');
 let mainWindow = null;
 let overlayWindow = null;
 let powerSaveId = null;
+let currentOverlayConfig = null;
+
+function getScriptsFilePath() {
+  try {
+    const userDataPath = app.getPath('userData');
+    return path.join(userDataPath, 'cueflow_scripts.json');
+  } catch {
+    return null;
+  }
+}
 
 function createMainWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
-    height: 800,
+    height: 820,
     minWidth: 800,
     minHeight: 600,
     backgroundColor: '#0F172A',
@@ -22,6 +32,10 @@ function createMainWindow() {
     },
     autoHideMenuBar: true,
     show: false,
+  });
+
+  mainWindow.webContents.on('console-message', (_event, level, message, line, sourceId) => {
+    console.log(`[Renderer Console Level ${level}]: ${message} (${sourceId}:${line})`);
   });
 
   const indexPath = path.join(__dirname, '../dist/renderer/index.html');
@@ -53,6 +67,32 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
+});
+
+// IPC: Scripts Storage Persistence to Disk
+ipcMain.handle('app:saveStoredScripts', async (_event, jsonString) => {
+  try {
+    const file = getScriptsFilePath();
+    if (file) {
+      await fs.promises.writeFile(file, jsonString, 'utf8');
+      return true;
+    }
+  } catch (err) {
+    console.warn('[desktop/main] Failed to save cueflow_scripts.json:', err);
+  }
+  return false;
+});
+
+ipcMain.handle('app:loadStoredScripts', async () => {
+  try {
+    const file = getScriptsFilePath();
+    if (file && fs.existsSync(file)) {
+      return await fs.promises.readFile(file, 'utf8');
+    }
+  } catch (err) {
+    console.warn('[desktop/main] Failed to load cueflow_scripts.json:', err);
+  }
+  return null;
 });
 
 // IPC: Keep awake
@@ -115,19 +155,28 @@ ipcMain.handle('app:exportTextFile', async (_event, { title, content }) => {
 
 // IPC: Floating Overlay Window
 ipcMain.handle('overlay:launch', (_event, config) => {
+  currentOverlayConfig = config || {};
+
   if (overlayWindow && !overlayWindow.isDestroyed()) {
-    overlayWindow.webContents.send('init-overlay', config);
+    overlayWindow.webContents.send('init-overlay', currentOverlayConfig);
+    overlayWindow.webContents.executeJavaScript(`
+      if (window.initOverlay) {
+        window.initOverlay(${JSON.stringify(currentOverlayConfig)});
+      }
+    `).catch(() => {});
+    overlayWindow.show();
     overlayWindow.focus();
+    overlayWindow.setAlwaysOnTop(true, 'screen-saver');
     return true;
   }
 
-  const width = Math.min(600, Math.max(300, config.width || 400));
-  const height = Math.min(600, Math.max(200, config.height || 320));
+  const width = Math.min(800, Math.max(340, config.width || 460));
+  const height = Math.min(700, Math.max(220, config.height || 380));
 
   overlayWindow = new BrowserWindow({
     width,
     height,
-    minWidth: 260,
+    minWidth: 280,
     minHeight: 180,
     alwaysOnTop: true,
     frame: false,
@@ -137,14 +186,25 @@ ipcMain.handle('overlay:launch', (_event, config) => {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
+      sandbox: false,
     },
     skipTaskbar: false,
   });
 
+  overlayWindow.setAlwaysOnTop(true, 'screen-saver');
+  try {
+    overlayWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+  } catch {}
+
   overlayWindow.loadFile(path.join(__dirname, 'floating.html'));
 
-  overlayWindow.webContents.once('did-finish-load', () => {
-    overlayWindow.webContents.send('init-overlay', config);
+  overlayWindow.webContents.on('did-finish-load', () => {
+    overlayWindow.webContents.send('init-overlay', currentOverlayConfig);
+    overlayWindow.webContents.executeJavaScript(`
+      if (window.initOverlay) {
+        window.initOverlay(${JSON.stringify(currentOverlayConfig)});
+      }
+    `).catch(() => {});
   });
 
   overlayWindow.on('closed', () => {
@@ -154,7 +214,13 @@ ipcMain.handle('overlay:launch', (_event, config) => {
     }
   });
 
+  overlayWindow.show();
+  overlayWindow.focus();
   return true;
+});
+
+ipcMain.handle('overlay:getConfig', () => {
+  return currentOverlayConfig;
 });
 
 ipcMain.handle('overlay:close', () => {
