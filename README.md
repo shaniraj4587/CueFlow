@@ -15,6 +15,9 @@
   <a href="https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.apk">
     <img src="https://img.shields.io/badge/Download-Android%20(51%20MB%20Original)-CF5418?style=for-the-badge&logo=android&logoColor=white" alt="Download Android 51MB Original" />
   </a>
+  <a href="https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-React-Native.apk">
+    <img src="https://img.shields.io/badge/Download-React%20Native%20(51%20MB)-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="Download React Native APK" />
+  </a>
   <a href="https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.Setup.1.0.0.exe">
     <img src="https://img.shields.io/badge/Download-Windows%20Setup-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Download Windows Setup" />
   </a>
@@ -40,6 +43,7 @@ A simple guide to pick the right download for your phone, tablet, or PC:
 | **Any Modern Android Device (Recommended)**<br>*(Samsung, Google Pixel, OnePlus, Xiaomi, Oppo, Vivo, Motorola, Realme, Nothing, etc. from 2017 to now)* | ⚡ **[Download CueFlow (15 MB - Recommended)](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-arm64-v8a.apk)** | **15.2 MB** | **70% smaller download!** Saves storage and mobile data. 100% exact UI & full features. |
 | **All Android Devices / Older Phones**<br>*(The original full universal package that runs on every Android phone)* | 📦 **[Download CueFlow Original (51 MB)](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.apk)** | **51.0 MB** | The original full universal release containing all bundled device architectures. |
 | **Alternative Universal Build** | 📦 **[Download CueFlow Universal (45 MB)](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-universal.apk)** | **45.8 MB** | ProGuard-optimized universal release for all ARM devices. |
+| **React Native Build** | ⚛️ **[Download CueFlow (React Native)](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-React-Native.apk)** | **51.0 MB** | Full standard React Native build. |
 
 > **💡 Quick Android Tip**: Download the **15.2 MB Recommended** build first! It is 70% smaller and works on almost all Android phones and tablets made in the last 8+ years. If it ever doesn't install on an older phone, simply download the **Original 51 MB** build.
 
