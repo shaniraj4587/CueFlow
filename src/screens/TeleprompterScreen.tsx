@@ -123,6 +123,14 @@ export const TeleprompterScreen: React.FC<Props> = ({ route, navigation }) => {
     }
   };
 
+  const handleSpeedChange = useCallback(
+    (newSpeed: number) => {
+      updateSpeed(newSpeed);
+      SettingsStorage.updateReadingSettings({ speed: newSpeed });
+    },
+    [updateSpeed]
+  );
+
   const handleLaunchFloating = async () => {
     if (!script) return;
     pause();
@@ -321,7 +329,7 @@ export const TeleprompterScreen: React.FC<Props> = ({ route, navigation }) => {
                 }}
                 onTogglePlay={togglePlayPause}
                 onRestart={restart}
-                onSpeedChange={updateSpeed}
+                onSpeedChange={handleSpeedChange}
                 onSeek={seekToPercent}
                 onLaunchFloating={handleLaunchFloating}
               />

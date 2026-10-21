@@ -7,15 +7,17 @@ export interface LineInfo {
 export class TeleprompterEngine {
   /**
    * Convert user-facing speed (1 to 20) to pixels per frame (at 60fps)
-   * Speed 1: ~15 px/sec (0.25 px/frame)
-   * Speed 5: ~45 px/sec (0.75 px/frame)
-   * Speed 10: ~90 px/sec (1.5 px/frame)
-   * Speed 20: ~240 px/sec (4.0 px/frame)
+   * Calibrated curve ensures clear, legible scrolling at 1X and 2X:
+   * Speed 1: ~18 px/sec (0.30 px/frame) - comfortable slow reading (~130 WPM)
+   * Speed 2: ~27 px/sec (0.45 px/frame) - relaxed natural speed (~190 WPM)
+   * Speed 3: ~38 px/sec (0.63 px/frame) - standard speaking speed (~260 WPM)
+   * Speed 5: ~61 px/sec (1.02 px/frame)
+   * Speed 10: ~130 px/sec (2.17 px/frame)
+   * Speed 20: ~303 px/sec (5.06 px/frame)
    */
   static speedToPixelsPerFrame(speed: number): number {
     const clamped = Math.max(1, Math.min(20, speed));
-    // Non-linear mapping provides fine control at low speeds and sufficient range at high speeds
-    const pxPerSec = 10 + Math.pow(clamped, 1.8) * 1.0;
+    const pxPerSec = 18 + (clamped - 1) * 8 + Math.pow(clamped - 1, 1.6) * 1.2;
     return pxPerSec / 60;
   }
 
@@ -23,10 +25,9 @@ export class TeleprompterEngine {
    * Convert words per minute estimate based on speed and font size
    */
   static estimateWpm(speed: number, fontSize: number): number {
-    // Average line is ~40-60 characters, ~8-12 words
-    // Higher speed scrolls more lines per minute
-    const pxPerSec = 10 + Math.pow(speed, 1.8) * 1.0;
-    const estimatedLineHeight = fontSize * 1.6;
+    const clamped = Math.max(1, Math.min(20, speed));
+    const pxPerSec = 18 + (clamped - 1) * 8 + Math.pow(clamped - 1, 1.6) * 1.2;
+    const estimatedLineHeight = Math.max(20, fontSize * 1.6);
     const linesPerMinute = (pxPerSec * 60) / estimatedLineHeight;
     const avgWordsPerLine = 7;
     return Math.round(linesPerMinute * avgWordsPerLine);
