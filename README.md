@@ -15,8 +15,11 @@
   <a href="https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.1.0.0.exe">
     <img src="https://img.shields.io/badge/Download-Windows%20Portable-238636?style=for-the-badge&logo=windows&logoColor=white" alt="Download Windows Portable" />
   </a>
-  <a href="https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.apk">
-    <img src="https://img.shields.io/badge/Download-Android%20APK-CF5418?style=for-the-badge&logo=android&logoColor=white" alt="Download Android APK" />
+  <a href="https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-arm64-v8a.apk">
+    <img src="https://img.shields.io/badge/Download-Android%20Optimized%20(15.2%20MB)-00C853?style=for-the-badge&logo=android&logoColor=white" alt="Download Optimized Android APK" />
+  </a>
+  <a href="https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-universal.apk">
+    <img src="https://img.shields.io/badge/Download-Universal%20APK%20(45.8%20MB)-CF5418?style=for-the-badge&logo=android&logoColor=white" alt="Download Universal APK" />
   </a>
   <a href="https://github.com/shaniraj4587/CueFlow/releases/latest">
     <img src="https://img.shields.io/badge/Release-v1.0.0-202631?style=for-the-badge&logo=github&logoColor=white" alt="Latest Release" />
@@ -47,11 +50,16 @@ Choose the edition that best suits your workflow:
 
 ### 📱 Android (Phones & Tablets)
 
-👉 **[Download CueFlow.apk (Android 7.0+)](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.apk)** (51.0 MB)
+All Android builds preserve **100% full features and exact UI**:
+
+| Edition | Size | Direct Download | Description |
+|---|---|---|---|
+| ⚡ **Optimized (arm64-v8a) — Recommended** | **15.2 MB** | 👉 **[Download CueFlow-arm64-v8a.apk](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-arm64-v8a.apk)** | **70% smaller than universal!** Tailored for modern 64-bit Android smartphones & tablets. Full features & identical UI. |
+| 📦 **Universal Package** | 45.8 MB | 👉 **[Download CueFlow-universal.apk](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-universal.apk)** | All-in-one universal APK supporting all 32-bit and 64-bit ARM Android devices. |
 
 #### Android Installation Steps:
-1. Tap the **Download CueFlow.apk** link above on your Android phone or tablet.
-2. Open your **Downloads** folder and tap **`CueFlow.apk`**.
+1. Tap the **Download CueFlow-arm64-v8a.apk** link above on your Android phone or tablet.
+2. Open your **Downloads** folder and tap **`CueFlow-arm64-v8a.apk`**.
 3. If prompted with *"For your security, your phone is not allowed to install unknown apps from this source"*, tap **Settings** and enable **Allow from this source**.
 4. Tap **Install** and open CueFlow.
 
@@ -124,7 +132,7 @@ Choose the edition that best suits your workflow:
   * Standalone transparent, frameless, always-on-top overlay window with sub-pixel float accumulation rendering.
   * Electron Builder packaging for NSIS Installer, Standalone Portable, and ZIP targets.
 * **Mobile Platform (Android)**:
-  * React Native Hermes Bytecode Engine.
+  * React Native Hermes Bytecode Engine with ProGuard minification & ABI splits.
   * Kotlin Native Modules: `FloatingTeleprompterService.kt` (WindowManager overlay), `VoiceFollowModule.kt` (Android SpeechRecognizer), `FileAccessModule.kt` (SAF file picker), `KeepAwakeModule.kt`.
 * **State Management**: Reactive global publish/subscribe architecture for synchronous multi-screen updates.
 * **Testing**: Comprehensive Jest test suite.
@@ -168,10 +176,10 @@ npm run dist:windows
 # Run on connected Android device or emulator
 npm run android
 
-# Build Production Release APK
+# Build Production Release APKs (Optimized arm64-v8a + Universal)
 cd android
 ./gradlew assembleRelease
-# Output: android/app/build/outputs/apk/release/app-release.apk
+# Output: android/app/build/outputs/apk/release/
 ```
 
 ---
