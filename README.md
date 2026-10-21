@@ -9,8 +9,11 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-arm64-v8a.apk">
+    <img src="https://img.shields.io/badge/Download-APK%20(15%20MB%20Recommended)-00C853?style=for-the-badge&logo=android&logoColor=white" alt="Download APK (15 MB Recommended)" />
+  </a>
   <a href="https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.apk">
-    <img src="https://img.shields.io/badge/Download-CueFlow%20APK-CF5418?style=for-the-badge&logo=android&logoColor=white" alt="Download APK" />
+    <img src="https://img.shields.io/badge/Download-APK%20(51%20MB%20Universal)-CF5418?style=for-the-badge&logo=android&logoColor=white" alt="Download APK (51 MB Universal)" />
   </a>
   <a href="https://github.com/shaniraj4587/CueFlow/releases/latest">
     <img src="https://img.shields.io/badge/Release-v1.0.0-202631?style=for-the-badge&logo=github&logoColor=white" alt="Latest Release" />
@@ -26,12 +29,13 @@
 Anyone with an Android phone or tablet can download and use CueFlow right now for free:
 
 ### ⚡ Direct Download
-👉 **[Download CueFlow.apk (Latest Version)](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.apk)** (51.0 MB)
+* ⚡ **[Download CueFlow (15 MB Recommended)](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-arm64-v8a.apk)** — Best for all modern Android phones & tablets (70% smaller)
+* 📦 **[Download CueFlow Universal (51 MB)](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.apk)** — Universal package for all Android devices
 
 ### 📲 Quick Installation Steps:
-1. Tap the **Download CueFlow.apk** link above on your Android phone or tablet.
+1. Tap the **Download CueFlow (15 MB Recommended)** link above on your Android phone or tablet.
 2. Once the download finishes, open your **Downloads** folder (or tap the download notification).
-3. Tap **`CueFlow.apk`**.
+3. Tap the downloaded `.apk` file.
 4. If prompted with *"For your security, your phone is not allowed to install unknown apps from this source"*, tap **Settings** and toggle **Allow from this source**.
 5. Tap **Install** and then tap **Open**.
 6. Enjoy seamless teleprompting!
