@@ -9,17 +9,17 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-arm64-v8a.apk">
+    <img src="https://img.shields.io/badge/Download-Android%20(15%20MB%20Recommended)-00C853?style=for-the-badge&logo=android&logoColor=white" alt="Download Android 15MB Recommended" />
+  </a>
+  <a href="https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.apk">
+    <img src="https://img.shields.io/badge/Download-Android%20(51%20MB%20Original)-CF5418?style=for-the-badge&logo=android&logoColor=white" alt="Download Android 51MB Original" />
+  </a>
   <a href="https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.Setup.1.0.0.exe">
     <img src="https://img.shields.io/badge/Download-Windows%20Setup-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Download Windows Setup" />
   </a>
   <a href="https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.1.0.0.exe">
     <img src="https://img.shields.io/badge/Download-Windows%20Portable-238636?style=for-the-badge&logo=windows&logoColor=white" alt="Download Windows Portable" />
-  </a>
-  <a href="https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-arm64-v8a.apk">
-    <img src="https://img.shields.io/badge/Download-Android%20Optimized%20(15.2%20MB)-00C853?style=for-the-badge&logo=android&logoColor=white" alt="Download Optimized Android APK" />
-  </a>
-  <a href="https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-universal.apk">
-    <img src="https://img.shields.io/badge/Download-Universal%20APK%20(45.8%20MB)-CF5418?style=for-the-badge&logo=android&logoColor=white" alt="Download Universal APK" />
   </a>
   <a href="https://github.com/shaniraj4587/CueFlow/releases/latest">
     <img src="https://img.shields.io/badge/Release-v1.0.0-202631?style=for-the-badge&logo=github&logoColor=white" alt="Latest Release" />
@@ -29,39 +29,40 @@
 
 ---
 
-## 📥 Download and Install
+## 📥 Which Version Should You Download?
 
-### 🪟 Windows (10 / 11, 64-bit)
+A simple guide to pick the right download for your phone, tablet, or PC:
 
-Choose the edition that best suits your workflow:
+### 📱 For Android (Phones & Tablets)
 
-| Edition | Direct Download | Description |
-|---|---|---|
-| **Windows Installer** | 👉 **[Download CueFlow Setup 1.0.0.exe](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.Setup.1.0.0.exe)** | Standard NSIS installer with Start Menu and Desktop shortcuts. |
-| **Standalone Portable** | 👉 **[Download CueFlow 1.0.0.exe](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.1.0.0.exe)** | Single-file portable `.exe`. No installation required, runs directly from anywhere (USB drive, Desktop). |
-| **Portable ZIP** | 👉 **[Download CueFlow-1.0.0-win.zip](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-1.0.0-win.zip)** | Unpack-and-run standalone archive with all binaries included. |
+| Your Device | Best Download | File Size | Description |
+|---|---|---|---|
+| **Any Modern Android Device (Recommended)**<br>*(Samsung, Google Pixel, OnePlus, Xiaomi, Oppo, Vivo, Motorola, Realme, Nothing, etc. from 2017 to now)* | ⚡ **[Download CueFlow (15 MB - Recommended)](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-arm64-v8a.apk)** | **15.2 MB** | **70% smaller download!** Saves storage and mobile data. 100% exact UI & full features. |
+| **All Android Devices / Older Phones**<br>*(The original full universal package that runs on every Android phone)* | 📦 **[Download CueFlow Original (51 MB)](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.apk)** | **51.0 MB** | The original full universal release containing all bundled device architectures. |
+| **Alternative Universal Build** | 📦 **[Download CueFlow Universal (45 MB)](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-universal.apk)** | **45.8 MB** | ProGuard-optimized universal release for all ARM devices. |
 
-#### Windows Installation & Running Guide:
-1. **Windows Installer**: Download `CueFlow Setup 1.0.0.exe`, double-click to install, and launch from your Desktop or Start Menu.
-2. **Portable Executable**: Download `CueFlow 1.0.0.exe`, double-click to run immediately without any installation or administrator rights required.
-3. *Note for Windows Defender / SmartScreen*: Because the binary is freshly built, click **"More info" → "Run anyway"** if SmartScreen appears.
+> **💡 Quick Android Tip**: Download the **15.2 MB Recommended** build first! It is 70% smaller and works on almost all Android phones and tablets made in the last 8+ years. If it ever doesn't install on an older phone, simply download the **Original 51 MB** build.
+
+#### Android Installation Steps (Takes 30 seconds):
+1. Tap the download link above on your Android phone or tablet.
+2. Open your phone's **Downloads** folder and tap the downloaded `.apk` file.
+3. If prompted with *"For your security, your phone is not allowed to install unknown apps from this source"*, tap **Settings** and switch on **Allow from this source**.
+4. Tap **Install** and open CueFlow!
 
 ---
 
-### 📱 Android (Phones & Tablets)
+### 🪟 For Windows (PC & Laptop — Windows 10 & 11)
 
-All Android builds preserve **100% full features and exact UI**:
+| How You Prefer to Use It | Best Download | Description |
+|---|---|---|
+| **Standard Installation (Recommended)** | 👉 **[Download Windows Setup (.exe)](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.Setup.1.0.0.exe)** | Standard installer with Start Menu and Desktop shortcuts. |
+| **Single Portable File (No Install Required)** | 👉 **[Download Windows Portable (.exe)](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.1.0.0.exe)** | Single `.exe` file. Double-click and it runs immediately from anywhere (USB drive, Desktop). |
+| **Portable ZIP Archive** | 👉 **[Download Windows Portable (.zip)](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-1.0.0-win.zip)** | Unpack folder and click `CueFlow.exe` to run. |
 
-| Edition | Size | Direct Download | Description |
-|---|---|---|---|
-| ⚡ **Optimized (arm64-v8a) — Recommended** | **15.2 MB** | 👉 **[Download CueFlow-arm64-v8a.apk](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-arm64-v8a.apk)** | **70% smaller than universal!** Tailored for modern 64-bit Android smartphones & tablets. Full features & identical UI. |
-| 📦 **Universal Package** | 45.8 MB | 👉 **[Download CueFlow-universal.apk](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-universal.apk)** | All-in-one universal APK supporting all 32-bit and 64-bit ARM Android devices. |
-
-#### Android Installation Steps:
-1. Tap the **Download CueFlow-arm64-v8a.apk** link above on your Android phone or tablet.
-2. Open your **Downloads** folder and tap **`CueFlow-arm64-v8a.apk`**.
-3. If prompted with *"For your security, your phone is not allowed to install unknown apps from this source"*, tap **Settings** and enable **Allow from this source**.
-4. Tap **Install** and open CueFlow.
+#### Windows Installation & Running Guide:
+1. Download **Windows Setup** or **Windows Portable** from the links above.
+2. Double-click the downloaded file to run.
+3. *(If Windows Defender / SmartScreen appears: click **"More info" ➔ "Run anyway"**).*
 
 ---
 
