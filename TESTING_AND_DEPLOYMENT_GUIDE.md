@@ -24,9 +24,8 @@ The project has compiled both production Android artifacts:
    - Go to **Settings > System > Developer options** and enable **USB debugging**.
 2. Connect your phone to your PC with a USB cable.
 3. Open a terminal and run:
-   ```powershell
-   $env:PATH = "C:\Users\shani\AppData\Local\Android\Sdk\platform-tools;$env:PATH"
-   adb install -r "C:\AntigravityProject\Pmptr\android\app\build\outputs\apk\release\app-release.apk"
+   ```bash
+   adb install -r android/app/build/outputs/apk/release/app-release.apk
    ```
 4. Once installed, tap the **PMPTR Teleprompter** icon on your device's home screen.
 
