@@ -75,6 +75,7 @@ class FloatingTeleprompterService : Service() {
     private var currentMirrorMode: Boolean = false
     private var currentBgColor: Int = Color.parseColor("#161B22")
     private var currentTextColor: Int = Color.WHITE
+    private var preciseScrollY: Float = 0f
 
     private val scrollHandler = Handler(Looper.getMainLooper())
     private var scrollRunnable: Runnable? = null
@@ -100,6 +101,7 @@ class FloatingTeleprompterService : Service() {
         val title = intent.getStringExtra(EXTRA_TITLE) ?: "Teleprompter"
         val content = intent.getStringExtra(EXTRA_CONTENT) ?: ""
         currentSpeed = intent.getIntExtra(EXTRA_SPEED, currentSpeed)
+        updateSpeedDisplay()
         currentFontSize = intent.getFloatExtra(EXTRA_FONT_SIZE, currentFontSize)
         currentOpacity = intent.getFloatExtra(EXTRA_OPACITY, currentOpacity)
         val bgHex = intent.getStringExtra(EXTRA_BACKGROUND_COLOR)
@@ -372,6 +374,7 @@ class FloatingTeleprompterService : Service() {
         val rewindBtn = createControlIconBtn("⏮") {
             scrollView?.smoothScrollTo(0, 0)
             currentScrollPosition = 0
+            preciseScrollY = 0f
         }
         bottomControls.addView(rewindBtn)
 
@@ -488,6 +491,7 @@ class FloatingTeleprompterService : Service() {
                 }
                 scrollView?.scrollTo(0, safeScroll)
                 currentScrollPosition = safeScroll
+                preciseScrollY = safeScroll.toFloat()
             }
         }
 
@@ -507,6 +511,7 @@ class FloatingTeleprompterService : Service() {
         scrollView?.post {
             scrollView?.scrollTo(0, 0)
             currentScrollPosition = 0
+            preciseScrollY = 0f
         }
     }
 
@@ -642,6 +647,9 @@ class FloatingTeleprompterService : Service() {
                 if (currentY >= maxScroll - dpToPx(20)) {
                     scrollView!!.scrollTo(0, 0)
                     currentScrollPosition = 0
+                    preciseScrollY = 0f
+                } else {
+                    preciseScrollY = currentY.toFloat()
                 }
             }
 
@@ -668,15 +676,29 @@ class FloatingTeleprompterService : Service() {
             override fun run() {
                 if (isPlaying && scrollView != null && scriptTextView != null) {
                     val currentY = scrollView!!.scrollY
-                    val maxScroll = scriptTextView!!.bottom - scrollView!!.height
+                    val maxScroll = (scriptTextView!!.bottom - scrollView!!.height).coerceAtLeast(0)
+
+                    // Sync precise position if user dragged manually
+                    if (Math.abs(preciseScrollY - currentY) > 5) {
+                        preciseScrollY = currentY.toFloat()
+                    }
 
                     if (currentY < maxScroll) {
-                        // Calculate smooth pixel delta per frame (approx 60fps = 16ms)
-                        val pixelsPerFrame = (currentSpeed * 0.45f).coerceAtLeast(0.3f)
-                        val nextY = (currentY + pixelsPerFrame).toInt()
-                        scrollView!!.scrollTo(0, nextY)
-                        currentScrollPosition = nextY
-                        FloatingTeleprompterModule.notifyScrollPosition(nextY, maxScroll)
+                        // Smooth calibrated speed curve:
+                        // Speed 1: ~0.65 px/frame (~39 px/sec, comfortable slow reading)
+                        // Speed 2: ~1.05 px/frame (~63 px/sec, relaxed reading)
+                        // Speed 3: ~1.45 px/frame (~87 px/sec, standard pace)
+                        // Speed 5: ~2.25 px/frame (~135 px/sec)
+                        // Speed 20: ~8.25 px/frame (~495 px/sec)
+                        val pixelsPerFrame = (0.25f + currentSpeed * 0.40f).coerceAtLeast(0.6f)
+                        preciseScrollY += pixelsPerFrame
+                        val nextY = preciseScrollY.toInt()
+
+                        if (nextY != currentY) {
+                            scrollView!!.scrollTo(0, nextY)
+                            currentScrollPosition = nextY
+                            FloatingTeleprompterModule.notifyScrollPosition(nextY, maxScroll)
+                        }
                         scrollHandler.postDelayed(this, 16)
                     } else {
                         // Reached bottom

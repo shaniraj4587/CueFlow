@@ -88,7 +88,7 @@ export function useTeleprompter({
         // Dynamic velocity based on measured speaking speed (WPM)
         // Standard speech: 130-170 WPM. Convert WPM into speed multiplier
         const wpmRatio = Math.max(0.65, Math.min(2.2, speakingWpmRef.current / 135));
-        const dynamicSpeed = Math.max(2, Math.min(18, speedRef.current * wpmRatio));
+        const dynamicSpeed = Math.max(1, Math.min(18, speedRef.current * wpmRatio));
         const targetPixelsPerFrame = TeleprompterEngine.speedToPixelsPerFrame(dynamicSpeed);
 
         // Smoothly accelerate / decelerate velocity toward target speed
@@ -288,7 +288,11 @@ export function useTeleprompter({
   const onScroll = useCallback(
     (event: any) => {
       const y = event.nativeEvent.contentOffset.y;
-      currentPosRef.current = y;
+      // While auto-scrolling, only let manual user swipes (> 30px offset) update position
+      // to avoid native sub-pixel rounding echo from resetting the precision scroll accumulator
+      if (!isPlayingRef.current || Math.abs(currentPosRef.current - y) > 30) {
+        currentPosRef.current = y;
+      }
       const maxScroll = Math.max(0, contentHeightRef.current - containerHeightRef.current);
       const pct = TeleprompterEngine.calculateProgress(y, maxScroll);
       scrollProgressPercentRef.current = pct;

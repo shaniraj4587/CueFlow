@@ -15,6 +15,9 @@
   <a href="https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.apk">
     <img src="https://img.shields.io/badge/Download-APK%20(51%20MB%20Universal)-CF5418?style=for-the-badge&logo=android&logoColor=white" alt="Download APK (51 MB Universal)" />
   </a>
+  <a href="https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-React-Native.apk">
+    <img src="https://img.shields.io/badge/Download-React%20Native%20(51%20MB)-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="Download React Native APK" />
+  </a>
   <a href="https://github.com/shaniraj4587/CueFlow/releases/latest">
     <img src="https://img.shields.io/badge/Release-v1.0.0-202631?style=for-the-badge&logo=github&logoColor=white" alt="Latest Release" />
   </a>
@@ -31,6 +34,7 @@ Anyone with an Android phone or tablet can download and use CueFlow right now fo
 ### ⚡ Direct Download
 * ⚡ **[Download CueFlow (15 MB Recommended)](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-arm64-v8a.apk)** — Best for all modern Android phones & tablets (70% smaller)
 * 📦 **[Download CueFlow Universal (51 MB)](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow.apk)** — Universal package for all Android devices
+* ⚛️ **[Download CueFlow (React Native)](https://github.com/shaniraj4587/CueFlow/releases/latest/download/CueFlow-React-Native.apk)** (51.0 MB) — Standard React Native release build
 
 ### 📲 Quick Installation Steps:
 1. Tap the **Download CueFlow (15 MB Recommended)** link above on your Android phone or tablet.

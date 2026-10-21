@@ -91,15 +91,27 @@ class FloatingTeleprompterModule(private val reactContext: ReactApplicationConte
                 if (options.hasKey("scriptId")) putExtra(FloatingTeleprompterService.EXTRA_SCRIPT_ID, options.getString("scriptId"))
                 if (options.hasKey("title")) putExtra(FloatingTeleprompterService.EXTRA_TITLE, options.getString("title"))
                 if (options.hasKey("content")) putExtra(FloatingTeleprompterService.EXTRA_CONTENT, options.getString("content"))
-                if (options.hasKey("speed")) putExtra(FloatingTeleprompterService.EXTRA_SPEED, options.getInt("speed"))
+                if (options.hasKey("speed")) {
+                    val s = try { options.getInt("speed") } catch (_: Exception) { options.getDouble("speed").toInt() }
+                    putExtra(FloatingTeleprompterService.EXTRA_SPEED, s)
+                }
                 if (options.hasKey("fontSize")) putExtra(FloatingTeleprompterService.EXTRA_FONT_SIZE, options.getDouble("fontSize").toFloat())
                 if (options.hasKey("opacity")) putExtra(FloatingTeleprompterService.EXTRA_OPACITY, options.getDouble("opacity").toFloat())
                 if (options.hasKey("backgroundColor")) putExtra(FloatingTeleprompterService.EXTRA_BACKGROUND_COLOR, options.getString("backgroundColor"))
                 if (options.hasKey("textColor")) putExtra(FloatingTeleprompterService.EXTRA_TEXT_COLOR, options.getString("textColor"))
                 if (options.hasKey("mirrorMode")) putExtra(FloatingTeleprompterService.EXTRA_MIRROR_MODE, options.getBoolean("mirrorMode"))
-                if (options.hasKey("scrollPosition")) putExtra(FloatingTeleprompterService.EXTRA_SCROLL_POS, options.getInt("scrollPosition"))
-                if (options.hasKey("width")) putExtra(FloatingTeleprompterService.EXTRA_WIDTH, options.getInt("width"))
-                if (options.hasKey("height")) putExtra(FloatingTeleprompterService.EXTRA_HEIGHT, options.getInt("height"))
+                if (options.hasKey("scrollPosition")) {
+                    val sp = try { options.getInt("scrollPosition") } catch (_: Exception) { options.getDouble("scrollPosition").toInt() }
+                    putExtra(FloatingTeleprompterService.EXTRA_SCROLL_POS, sp)
+                }
+                if (options.hasKey("width")) {
+                    val w = try { options.getInt("width") } catch (_: Exception) { options.getDouble("width").toInt() }
+                    putExtra(FloatingTeleprompterService.EXTRA_WIDTH, w)
+                }
+                if (options.hasKey("height")) {
+                    val h = try { options.getInt("height") } catch (_: Exception) { options.getDouble("height").toInt() }
+                    putExtra(FloatingTeleprompterService.EXTRA_HEIGHT, h)
+                }
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

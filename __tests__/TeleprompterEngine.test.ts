@@ -3,12 +3,14 @@ import { TeleprompterEngine } from '../src/services/TeleprompterEngine';
 describe('TeleprompterEngine', () => {
   it('converts speed levels to smooth positive pixel increments', () => {
     const speed1 = TeleprompterEngine.speedToPixelsPerFrame(1);
+    const speed2 = TeleprompterEngine.speedToPixelsPerFrame(2);
     const speed5 = TeleprompterEngine.speedToPixelsPerFrame(5);
     const speed10 = TeleprompterEngine.speedToPixelsPerFrame(10);
     const speed20 = TeleprompterEngine.speedToPixelsPerFrame(20);
 
-    expect(speed1).toBeGreaterThan(0);
-    expect(speed5).toBeGreaterThan(speed1);
+    expect(speed1).toBeGreaterThan(0.2);
+    expect(speed2).toBeGreaterThan(speed1);
+    expect(speed5).toBeGreaterThan(speed2);
     expect(speed10).toBeGreaterThan(speed5);
     expect(speed20).toBeGreaterThan(speed10);
   });

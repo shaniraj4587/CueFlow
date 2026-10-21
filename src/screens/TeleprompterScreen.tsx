@@ -24,6 +24,7 @@ import { KeepAwakeService } from '../services/KeepAwakeService';
 import { NativeOverlayService } from '../services/NativeOverlayService';
 import { PermissionService } from '../services/PermissionService';
 import { ScriptStorage } from '../services/ScriptStorage';
+import { SettingsStorage } from '../services/SettingsStorage';
 import { typography } from '../theme/typography';
 import { spacing, borderRadius } from '../theme/spacing';
 
@@ -32,7 +33,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Teleprompter'>;
 export const TeleprompterScreen: React.FC<Props> = ({ route, navigation }) => {
   const { scriptId } = route.params;
   const { getScriptById } = useScripts();
-  const { settings, colors, t } = useSettings();
+  const { settings, colors, t, updateReading } = useSettings();
   const { width, height } = useWindowDimensions();
 
   const isLandscape = width > height;
@@ -122,6 +123,14 @@ export const TeleprompterScreen: React.FC<Props> = ({ route, navigation }) => {
       resetControlsTimeout();
     }
   };
+
+  const handleSpeedChange = useCallback(
+    (newSpeed: number) => {
+      updateSpeed(newSpeed);
+      updateReading({ speed: newSpeed });
+    },
+    [updateSpeed, updateReading]
+  );
 
   const handleLaunchFloating = async () => {
     if (!script) return;
@@ -321,7 +330,7 @@ export const TeleprompterScreen: React.FC<Props> = ({ route, navigation }) => {
                 }}
                 onTogglePlay={togglePlayPause}
                 onRestart={restart}
-                onSpeedChange={updateSpeed}
+                onSpeedChange={handleSpeedChange}
                 onSeek={seekToPercent}
                 onLaunchFloating={handleLaunchFloating}
               />
